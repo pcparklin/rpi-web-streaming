@@ -1,0 +1,41 @@
+<!doctype html>
+<title>Setting of OVERLAY</title>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="/static/js/jscolor.min.js"></script>
+<h1>Setting of OVERLAY</h1>
+<div>
+  <iframe width="640" height="360" src="https://www.youtube.com/embed/{% if overlay %}{{ overlay.videoId }}?autoplay=1{% endif %}" frameborder="0" allowfullscreen></iframe>
+</div>
+<div>
+  <form id="overlay_form">
+    <li>Last modified: <span id="modified">{% if overlay %}{{ overlay.modified }}{% endif %}</span></li>
+    <li>x-axis: <input type=text size=30 name=x value="{% if overlay %}{{ overlay.x }}{% endif %}"></li>
+    <li>y-axis: <input type=text size=30 name=y value="{% if overlay %}{{ overlay.y }}{% endif %}"></li>
+    <li>text: <input type=text size=30 name=text value="{% if overlay %}{{ overlay.text }}{% endif %}"></li>
+    <li>color: <input readonly size=6 class="jscolor" name=color value="{% if overlay %}{{ overlay.color }}{% endif %}"></li>
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+  </form>
+  <button id="btn_update">Update</button>
+  <button id="btn_disconnect">Disconnect</button>
+</div>
+<script type=text/javascript>
+  $(function() {
+    $('#btn_update').click(function () {
+      $.ajax({
+        url: '/_update_overlay',
+        data: $('#overlay_form').serialize(),
+        type: 'POST',
+        success: function(response) {
+          $('#modified').text(response.modified);
+          alert(response.msg);
+        },
+        error: function(error) {
+          alert(error.msg);
+        }
+      });
+    });
+    $('#btn_disconnect').click(function() {
+      window.location = '/disconnect?platform={{ overlay.platform }}';
+    });
+  });
+</script>

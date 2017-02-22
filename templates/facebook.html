@@ -1,0 +1,19 @@
+<!doctype html>
+<title>Streaming to Facebook</title>
+<h1>Streaming to Facebook</h1>
+<div>
+  <form action="{{ url_for('connect') }}" method=post>
+    <li>Server: <input type=text size=30 name=server></li>
+    <li>Key: <input type=text size=30 name=key></li>
+    <li>url: <input type=text size=30 name=url></li>
+    <input type='hidden' name=platform value='facebook'>
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+    <input type=submit value=Connect>
+  </form>
+</div>
+<div>
+  <p>Streaming Status: 
+    <img src='/static/{% if pid %}green.gif{% else %}red.gif{% endif %}'>
+    {% if pid %}({{ pid }}){% endif %}
+  </p>
+</div>

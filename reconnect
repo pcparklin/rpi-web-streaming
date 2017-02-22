@@ -1,0 +1,5 @@
+#!/bin/sh
+FFMPEG="./ffmpeg"
+sudo killall mmal_video_record ffmpeg
+./mmal_video_record -b 2500000 | ./ffmpeg -ar 44100 -ac 1 -f alsa -thread_queue_size 1024 -i ${1} -f h264 -thread_queue_size 1024 -i - -vcodec copy -acodec aac -ab 128k -g 50 -f flv ${2} &
+sleep 10
